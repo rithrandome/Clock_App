@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Clock</string>
+    <string name="alarm">Alarm</string>
+    <string name="stopwatch">Stopwatch</string>
+    <string name="timer">Timer</string>
+    <string name="alarm_fragment">Alarm Fragment</string>
+    <string name="timer_fragment">Timer Fragment</string>
+    <string name="stopwatch_fragment">Stopwatch Fragment</string>
+    <string name="todo">TODO</string>
+    <string name="_00_00_00">00 : 00 : 00</string>
+    <string name="placeholder_list">Click on the button below to begin creating alarms</string>
+</resources>
