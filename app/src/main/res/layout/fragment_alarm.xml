@@ -4,51 +4,210 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-<!--    <ListView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:id="@+id/alarm_list"/>-->
-
-    <RelativeLayout
+    <TimePicker
+        android:id="@+id/time_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
+        android:layout_alignParentTop="true"/>
 
-        <TextView
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/time_picker"
+        android:background="@android:color/darker_gray">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:padding="16dp"
-            android:gravity="center"
-            android:textColor="#adadad"
-            android:text="@string/placeholder_list"/>
+            android:orientation="vertical" >
 
-    </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/date_layout"
+                android:clickable="true"
+                android:onClick="setDate"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground">
 
-   <com.google.android.material.floatingactionbutton.FloatingActionButton
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:src="@drawable/ic_plus"
-       android:id="@+id/add_alarm"
-       android:layout_alignParentBottom="true"
-       android:layout_alignParentRight="true"
-       android:layout_margin="16dp"/>
+                <ImageView
+                    android:id="@+id/date_icon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentStart="true"
+                    android:src="@drawable/ic_date"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:contentDescription="TODO" />
 
-<!--    <TimePicker-->
-<!--        android:id="@+id/time_picker"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:numbersInnerTextColor="@color/green"-->
-<!--        android:numbersSelectorColor="@color/grey" />-->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/date_icon"
+                    android:orientation="vertical"
+                    android:layout_toEndOf="@id/date_icon">
 
+                    <TextView
+                        android:id="@+id/date_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Date"
+                        android:textColor="@android:color/white"
+                        android:textSize="20dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.048"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-<!--    <RelativeLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"/>-->
+                    <TextView
+                        android:id="@+id/date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="43dp"
+                        android:layout_marginEnd="355dp"
+                        android:layout_marginRight="355dp"
+                        android:layout_marginBottom="16dp"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/repeat_layout"
+                android:clickable="true"
+                android:onClick="setDate"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground">
+
+                <ImageView
+                    android:id="@+id/repeat_icon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentStart="true"
+                    android:src="@drawable/ic_repeat"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:contentDescription="TODO" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/repeat_icon"
+                    android:orientation="vertical"
+                    android:layout_toEndOf="@id/repeat_icon">
+
+                    <TextView
+                        android:id="@+id/repeat_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Repeat"
+                        android:textColor="@android:color/white"
+                        android:textSize="20dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.051"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/repeat_days"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="43dp"
+                        android:layout_marginEnd="355dp"
+                        android:layout_marginRight="355dp"
+                        android:layout_marginBottom="16dp"
+                        android:textSize="12sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/repeat_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginRight="20dp"
+                    android:onClick="onSwitchRepeat"
+                    android:textOff="off"
+                    android:textOn="on" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/choose_repeat_days"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+<!--                <androidx.appcompat.widget.AppCompatToggleButton-->
+<!--                    android:id="@+id/alarm_state"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_centerInParent="true"-->
+<!--                    android:layout_centerHorizontal="true"-->
+<!--                    android:layout_centerVertical="true"-->
+<!--                    android:textOn="On"-->
+<!--                    android:textOff="Off"/>-->
+                <Button
+                    android:id="@+id/setAlarm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Set Alarm"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="20dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="20dp" />
+
+                <Button
+                    android:id="@+id/cancelAlarm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_centerVertical="true"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="Cancel" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </RelativeLayout>

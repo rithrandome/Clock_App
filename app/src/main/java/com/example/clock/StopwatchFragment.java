@@ -7,12 +7,20 @@ import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class StopwatchFragment extends Fragment {
@@ -25,6 +33,11 @@ public class StopwatchFragment extends Fragment {
     long tMilliSec, tStart, tBuff, tUpdate = 0L;
     int sec, min, milliSec;
 
+    ListView listView;
+    String[] ListElements = new String[] {  };
+    List<String> ListElementsArrayList ;
+    ArrayAdapter<String> adapter;
+
     @Override
     public View onCreateView( LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
 
@@ -33,8 +46,32 @@ public class StopwatchFragment extends Fragment {
         chronometer = view.findViewById(R.id.chronometer);
         btStart = view.findViewById(R.id.bt_start);
         btStop= view.findViewById(R.id.bt_stop);
+        listView = view.findViewById(R.id.listview);
 
         handler = new Handler();
+
+        ListElementsArrayList = new ArrayList<>(Arrays.asList(ListElements));
+
+        adapter = new ArrayAdapter<String>(view.getContext(),
+                R.layout.list_item,
+                ListElementsArrayList);
+//        {
+//            @NonNull
+//            @Override
+//            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+//                View v = super.getView(position, convertView, parent);
+//
+//                TextView textView=(TextView) v.findViewById(android.R.id.text1);
+//                textView.setTextSize(20);
+//
+//
+//
+//                return v;
+//            }
+//        };
+//
+        if(listView != null)
+            listView.setAdapter(adapter);
 
         btStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,8 +82,9 @@ public class StopwatchFragment extends Fragment {
                     chronometer.setTextColor(Color.parseColor("#0a8f44"));
                     chronometer.start();
                     isResume = true;
-                    btStop.setVisibility(View.INVISIBLE);
+//                    btStop.setVisibility(View.INVISIBLE);
                     btStart.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause));
+                    btStop.setImageDrawable(getResources().getDrawable(R.drawable.ic_flag));
                 }
                 else {
                     tBuff += tMilliSec;
@@ -56,6 +94,7 @@ public class StopwatchFragment extends Fragment {
                     isResume = false;
                     btStop.setVisibility(View.VISIBLE);
                     btStart.setImageDrawable(getResources().getDrawable(R.drawable.ic_play));
+                    btStop.setImageDrawable(getResources().getDrawable(R.drawable.ic_stop));
                 }
             }
         });
@@ -74,6 +113,17 @@ public class StopwatchFragment extends Fragment {
                     min = 0;
                     milliSec = 0;
                     chronometer.setText("00:00:00");
+
+                    ListElementsArrayList.clear();
+
+                    adapter.notifyDataSetChanged();
+
+                }
+                else{
+
+                    ListElementsArrayList.add(chronometer.getText().toString());
+
+                    adapter.notifyDataSetChanged();
                 }
             }
         });

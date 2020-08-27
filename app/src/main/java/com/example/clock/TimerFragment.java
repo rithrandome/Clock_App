@@ -226,7 +226,7 @@ public class TimerFragment extends Fragment {
     }
 
     private void timerEndSound(int state){
-        MediaPlayer timer_end = MediaPlayer.create(getActivity(),R.raw.alarm_sound1);
+        MediaPlayer timer_end = MediaPlayer.create(getActivity(),R.raw.alarm_tone2 );
         if(state == 1) {
             timer_end.start();
             timerEndSound(1);
