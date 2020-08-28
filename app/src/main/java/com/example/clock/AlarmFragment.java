@@ -15,6 +15,7 @@ import android.widget.DatePicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.SwitchCompat;
@@ -26,11 +27,11 @@ import java.util.Objects;
 
 public class AlarmFragment extends Fragment {
 
-    int hour, minute;
+    int hour, minute, current_hour, current_minute;
     String hour_string, minute_string;
     TimePicker alarmTimePicker;
     AlarmManager alarmManager;
-    RelativeLayout dateLayout, repeatLayout ;
+    RelativeLayout dateLayout, repeatLayout, ringtoneLayout ;
     DatePicker setAlarmDate;
     TextView date, repeatDays;
     SwitchCompat repeatState;
@@ -51,6 +52,7 @@ public class AlarmFragment extends Fragment {
         cancelAlarm = view.findViewById(R.id.cancelAlarm);
 
         dateLayout = view.findViewById(R.id.date_layout);
+        ringtoneLayout = view.findViewById(R.id.ringtone_layout);
         repeatLayout = view.findViewById(R.id.repeat_layout);
         date = view.findViewById(R.id.date);
         repeatDays = view.findViewById(R.id.repeat_days);
@@ -71,6 +73,13 @@ public class AlarmFragment extends Fragment {
             }
         });
 
+        ringtoneLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                assert true;
+            }
+        });
+
 //        repeatState.setOnCheckedChangeListener(onCheckedChanged());
 
         setAlarm.setOnClickListener(new View.OnClickListener() {
@@ -79,21 +88,26 @@ public class AlarmFragment extends Fragment {
 
                 Calendar calendar = Calendar.getInstance();
 
+                current_hour = Calendar.HOUR;
+                current_minute = Calendar.MINUTE;
                 hour = alarmTimePicker.getHour();
                 minute = alarmTimePicker.getMinute();
                 hour_string = String.valueOf(hour);
                 minute_string = String.valueOf(minute);
 
+//                if(hour > 0 && hour > current_hour)
+//                    Toast.makeText(getActivity(),"Alarm set for " + (hour - current_hour) + " hours and " + (minute - current_minute) + " minutes from now", Toast.LENGTH_LONG).show();
+
 
                 calendar.set(Calendar.HOUR_OF_DAY, alarmTimePicker.getHour());
-                calendar.set(Calendar.MINUTE, minute);
+                calendar.set(Calendar.MINUTE, alarmTimePicker.getMinute());
 
                 Intent intent = new Intent (getActivity(), AlarmReceiver.class);
                 intent.putExtra("alarmState","Alarm on");
 
-                pending_intent = PendingIntent.getBroadcast(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                pending_intent = PendingIntent.getBroadcast(getActivity(), 0, intent, 0);
 
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),pending_intent);
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis() ,pending_intent);
             }
         });
 
@@ -101,7 +115,7 @@ public class AlarmFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if(pending_intent!=null)
+                if(pending_intent != null)
                     alarmManager.cancel(pending_intent);
 
                 Intent intent = new Intent (getActivity(), AlarmReceiver.class);

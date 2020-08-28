@@ -58,7 +58,7 @@
                         android:layout_height="wrap_content"
                         android:text="Date"
                         android:textColor="@android:color/white"
-                        android:textSize="20dp"
+                        android:textSize="20sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.048"
@@ -87,7 +87,6 @@
             <RelativeLayout
                 android:id="@+id/repeat_layout"
                 android:clickable="true"
-                android:onClick="setDate"
                 android:layout_width="match_parent"
                 android:layout_height="75dp"
                 android:focusable="true"
@@ -120,7 +119,7 @@
                         android:layout_height="wrap_content"
                         android:text="Repeat"
                         android:textColor="@android:color/white"
-                        android:textSize="20dp"
+                        android:textSize="20sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.051"
@@ -154,7 +153,6 @@
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="20dp"
                     android:layout_marginRight="20dp"
-                    android:onClick="onSwitchRepeat"
                     android:textOff="off"
                     android:textOn="on" />
 
@@ -166,18 +164,58 @@
                 android:layout_height="wrap_content"/>
 
             <RelativeLayout
+                android:id="@+id/ringtone_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="75dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?android:attr/selectableItemBackground">
 
-<!--                <androidx.appcompat.widget.AppCompatToggleButton-->
-<!--                    android:id="@+id/alarm_state"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_centerInParent="true"-->
-<!--                    android:layout_centerHorizontal="true"-->
-<!--                    android:layout_centerVertical="true"-->
-<!--                    android:textOn="On"-->
-<!--                    android:textOff="Off"/>-->
+                <ImageView
+                    android:id="@+id/ringtone_icon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentStart="true"
+                    android:src="@drawable/ic_ringtone"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:contentDescription="TODO" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@id/ringtone_icon"
+                    android:orientation="vertical"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/ringtone_icon">
+
+
+                    <TextView
+                        android:id="@+id/ringtone_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ringtone"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.054"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="75dp">
+
                 <Button
                     android:id="@+id/setAlarm"
                     android:layout_width="wrap_content"
