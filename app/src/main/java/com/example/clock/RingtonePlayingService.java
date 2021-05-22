@@ -1,7 +1,6 @@
 package com.example.clock;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -9,13 +8,22 @@ import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.util.Log;
 
+import static com.example.clock.NotificationHelper.CHANNEL_ID;
+
+
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 
 public class RingtonePlayingService extends Service {
 
     MediaPlayer ringtone;
     boolean isRunning;
     int startId;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
 
     @Nullable
     @Override
@@ -30,20 +38,24 @@ public class RingtonePlayingService extends Service {
 
         String alarmState = intent.getStringExtra("alarmState");
 
-        Log.e("Ringtone state   ",String.valueOf(alarmState));
+        Log.e("Ringtone state",String.valueOf(alarmState));
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        Intent intent1 =  new Intent(this.getApplicationContext(), AlarmFragment.class);
+        Intent notificationIntent =  new Intent(this, AlarmFragment.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,PendingIntent.FLAG_UPDATE_CURRENT );
 
-        Notification notification_popup = new Notification.Builder(this)
-                .setSmallIcon(R.drawable.clock)
-                .setContentTitle("Alarm !!")
-                .setContentText("Click to open")
-                .setContentIntent(PendingIntent.getActivity(this, 0, intent1,0))
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle("ALARM")
+                .setContentText("Alarm is Ringing !!")
+                .setSmallIcon(R.drawable.ic_alarm)
                 .setAutoCancel(true)
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .build();
 
+
         assert alarmState!=null;
+        System.out.println(alarmState);
         if(alarmState.toLowerCase().equals("alarm on")) startId = 1;
         else if(alarmState.toLowerCase().equals("alarm off")) startId = 0;
         else startId = 0;
@@ -56,11 +68,10 @@ public class RingtonePlayingService extends Service {
             ringtone.setLooping(true);
             ringtone.start();
 
+            startForeground(1, notification);
+
             this.isRunning = true;
             this.startId = 0;
-
-            notificationManager.notify(0,notification_popup);
-
 
         }
         else if(this.isRunning && startId == 0){
@@ -103,4 +114,8 @@ public class RingtonePlayingService extends Service {
 
         this.isRunning = false;
     }
+
+
+
+
 }

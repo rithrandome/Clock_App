@@ -1,26 +1,37 @@
 package com.example.clock;
 
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Locale;
+import java.util.Objects;
+
+import static android.content.Context.INPUT_METHOD_SERVICE;
+import static androidx.core.content.ContextCompat.getSystemService;
 
 public class TimerFragment extends Fragment {
 
@@ -54,6 +65,7 @@ public class TimerFragment extends Fragment {
         mHoursInput = view.findViewById(R.id.hrs_input);
 
         mButtonSet.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
                 String m_input, s_input, h_input;
@@ -83,6 +95,7 @@ public class TimerFragment extends Fragment {
         });
 
         mButtonStartPause.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View view) {
                 if (mTimerRunning) {
@@ -94,9 +107,12 @@ public class TimerFragment extends Fragment {
         });
 
         mButtonReset.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
+                vibrate(0);
                 resetTimer();
+                closeKeyboard();
 //                timerEndSound(0);
 //                blinkTextView(0);
             }
@@ -107,11 +123,13 @@ public class TimerFragment extends Fragment {
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void setTime(long milliseconds) {
         mStartTimeInMillis = milliseconds;
         resetTimer();
-//        closeKeyboard();
+        closeKeyboard();
     }
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void startTimer() {
         mEndTime = System.currentTimeMillis() + mTimeLeftInMillis;
         mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
@@ -120,6 +138,7 @@ public class TimerFragment extends Fragment {
                 mTimeLeftInMillis = millisUntilFinished;
                 updateCountDownText();
             }
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onFinish() {
                 mTimerRunning = false;
@@ -129,11 +148,13 @@ public class TimerFragment extends Fragment {
         mTimerRunning = true;
         updateWatchInterface();
     }
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void pauseTimer() {
         mCountDownTimer.cancel();
         mTimerRunning = false;
         updateWatchInterface();
     }
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void resetTimer() {
         mTimeLeftInMillis = mStartTimeInMillis;
         updateCountDownText();
@@ -148,6 +169,7 @@ public class TimerFragment extends Fragment {
                 "%02d:%02d:%02d", hours, minutes, seconds);
         mTextViewCountDown.setText(timeLeftFormatted);
     }
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void updateWatchInterface() {
         if (mTimerRunning) {
             mMinInput.setVisibility(View.INVISIBLE);
@@ -174,19 +196,23 @@ public class TimerFragment extends Fragment {
             }
             if (mTimeLeftInMillis < mStartTimeInMillis) {
                 mButtonReset.setVisibility(View.VISIBLE);
+                Log.e("timer stopped","timer stopped");
+                vibrate(1);
 //                blinkTextView(1);
             } else {
                 mButtonReset.setVisibility(View.INVISIBLE);
             }
         }
     }
-//    private void closeKeyboard() {
-//        View view = this.getCurrentFocus();
-//        if (view != null) {
-//            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-//            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-//        }
-//    }
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void closeKeyboard() {
+        View view = Objects.requireNonNull(getActivity()).getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onStop() {
         super.onStop();
@@ -197,11 +223,14 @@ public class TimerFragment extends Fragment {
 //        editor.putBoolean("timerRunning", mTimerRunning);
 //        editor.putLong("endTime", mEndTime);
 //        editor.apply();
+        Log.e("timer stopped","timer stopped");
         if (mCountDownTimer != null) {
             mCountDownTimer.cancel();
+
 //            timerEndSound(1);
         }
     }
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onStart() {
         super.onStart();
@@ -262,6 +291,24 @@ public class TimerFragment extends Fragment {
         }).start();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void vibrate(int state){
+        Vibrator v = (Vibrator) Objects.requireNonNull(getActivity()).getSystemService(Context.VIBRATOR_SERVICE);
+        long[] pattern = {0,500,500,500,500};
+
+        if(state == 1){
+            assert v != null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                v.vibrate(VibrationEffect.createOneShot(10000, VibrationEffect.DEFAULT_AMPLITUDE));
+                v.vibrate(VibrationEffect.createWaveform(pattern,0));
+            } else {
+                v.vibrate(10000);
+            }
+        }
+        else{
+            v.cancel();
+        }
+    }
 
 }
 
